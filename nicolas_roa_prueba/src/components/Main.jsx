@@ -2,12 +2,10 @@ import React from "react"
 import Tabla from "./Tabla"
 import LeftBar from "./LeftBar";
 import SelectorFilter from "./SelectFilter";
-
-
+import Chart from "./Chart"
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/esm/Col'
-
 
 class Main extends React.Component {
     constructor(props) {
@@ -20,8 +18,8 @@ class Main extends React.Component {
             columnas: this.props.columnas,
             favoritos: []
         };
-        this.filtoEnfermedad = this.filtoEnfermedad.bind(this)
-        this.filtoSelectAnno = this.filtoSelectAnno.bind(this)
+        this.filtoEnfermedad = this.filtoEnfermedad.bind(this);
+        this.filtoSelectAnno = this.filtoSelectAnno.bind(this);
         this.agregarFavorito = this.agregarFavorito.bind(this)
     }
     
@@ -59,6 +57,86 @@ class Main extends React.Component {
             headerTabla: filtroHeader,
             columnas: columnas
         });
+    }
+
+    renderGrafico(nombreEnfermedad, anno = false){
+        let labels = []
+        let data = []
+        let orden = []
+        let resultado = []
+        let titulo = ""
+        let filter = ''
+        let position = '';
+        let mesNumerico = ''
+        let num = 0
+        let meses = {
+            1:'Enero',
+            2:'Febrero',
+            3:'Marzo',
+            4:'Abril',
+            5:'Mayo',
+            6:'Junio',
+            7:'Julio',
+            8:'Agosto',
+            9:'Septiembre',
+            10:'Octubre',
+            11:'Noviembre',
+            12:'Diciembre'
+        }
+        
+        filter = this.props.headerTabla.find(e => e.name == nombreEnfermedad)
+        position = filter.position+7;
+        titulo = `Muertes en EEUU por ${nombreEnfermedad} ${anno}`
+
+        
+        let filtradoData = this.props.data.sort((a, b) => { return a[9] - b[9] }) 
+        if(anno == false){ num = 1 }else{ num = 2 }
+        
+        mesNumerico = this.state.headerTabla[num].cachedContents.top
+        mesNumerico = mesNumerico.sort((a,b) => { return a.item - b.item  })
+        mesNumerico.map(e => {if(anno != false){ labels.push(meses[Number(e.item)]) }else{ labels.push(e.item) } })
+
+        filtradoData.map(e => { 
+            if(anno == false){
+                if(nombreEnfermedad == "All Cause"){
+                    titulo = `Muertes en EEUU ${nombreEnfermedad} por año (hasta seleccionar un año)`
+                }else{
+                    titulo = `Muertes en EEUU por ${nombreEnfermedad} por año (hasta seleccionar un año)`
+                }
+                
+                if(labels.includes(e[9])){
+                    data.push({"a":Number(e[9]), "v":Number(e[position])})
+                }
+
+            }else{
+                if(e[9] == anno){
+                    resultado.push(e[position])
+                } 
+            }
+        })
+
+        
+        if(anno == false){
+            data.reduce((res, value) => {
+                if (!res[value.a]) {
+                    res[value.a] = { v: 0 };
+                    orden.push(res[value.a])
+                }
+                res[value.a].v += value.v;
+                return res;
+            }, {});
+
+            orden.map(e => {
+                resultado.push(e.v);
+            })
+        }
+
+
+        this.setState({
+            tituloGrafico:titulo,
+            labeles:labels,
+            dataGrafico:resultado
+        })        
     }
 
     cambiarPagina = (id) => {
@@ -104,6 +182,7 @@ class Main extends React.Component {
     filtoSelectAnno(e){
         let anno = e.target.value;
         let labelEnfermedad = document.getElementsByClassName("nombreEnfermedad")[0]
+        this.renderGrafico(labelEnfermedad.innerText, anno)
         this.renderTabla(labelEnfermedad.innerText, anno)
     }
 
@@ -130,6 +209,12 @@ class Main extends React.Component {
         }
     }
 
+    
+    componentDidMount(){
+        this.renderGrafico("All Cause")
+    }
+    
+
     render() {
         return (
             <>
@@ -141,7 +226,7 @@ class Main extends React.Component {
                     </Col>
                     <Col xs={12} md={6}>
                         <SelectorFilter evento={this.filtoSelectAnno} data={this.props.headerTabla}/>
-                        <p>aqui ira el Grafico (Chart)</p>
+                        <Chart labeles={this.state.labeles} data={this.state.dataGrafico} titulo={this.state.tituloGrafico}/>
                         <Tabla headers={this.state.headerTabla} columnas={this.state.columnas} evento={this.cambiarPagina}/>
                     </Col>
                 </Row>
