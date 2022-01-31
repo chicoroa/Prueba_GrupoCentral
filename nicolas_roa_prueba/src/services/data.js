@@ -26,5 +26,5 @@ export const useFetch = () => {
         setLoading(false)
       })
   }, [])
-  return { data, loading, error 
+  return { data, loading, error }
 }
