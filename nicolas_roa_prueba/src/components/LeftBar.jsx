@@ -96,8 +96,8 @@ class LeftBar extends React.Component{
                 <Card.Body>
                     <Row>
                         <Col xs={12} md={12} className="text-left">
-                            <Tab className="myClass" activeKey={this.state.activeTab} onSelect={this.handleSelect}>
-                                <Ta key="tab1" eventKey={1} key="Enfermedades" title="Enfermedades">
+                            <Tabs className="myClass" activeKey={this.state.activeTab} onSelect={this.handleSelect}>
+                                <Tab key="tab1" eventKey={1} key="Enfermedades" title="Enfermedades">
                                     <Col xs={12} md={12} className="mt-5 mb-5">
                                         <Form.Control type="text" placeholder="Buscador" onChangeCapture={this.buscador} className="mb-5"/>
                                         <div id="resultados"></div>
