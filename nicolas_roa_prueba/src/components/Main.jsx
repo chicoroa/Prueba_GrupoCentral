@@ -1,6 +1,13 @@
 import React from "react"
 import Tabla from "./Tabla"
+import LeftBar from "./LeftBar";
 import SelectorFilter from "./SelectFilter";
+
+
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/esm/Col'
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -65,10 +72,55 @@ class Main extends React.Component {
         }) 
     }
 
+    filtoEnfermedad(e) {
+        let elemento = e.target
+        let selectAnno = document.getElementsByClassName("annos")[0]
+        let labelEnfermedad = document.getElementsByClassName("nombreEnfermedad")[0]
+        let nombreEnfermedad = elemento.innerText
+        let anno = false
+
+        selectAnno.value = "0"
+        labelEnfermedad.setAttribute('name', elemento.id)
+        labelEnfermedad.innerText = nombreEnfermedad
+
+        if(this.state.favoritos.includes(elemento.id)){
+            selectAnno.removeAttribute("disabled")
+            if(selectAnno.value != 0) anno = selectAnno 
+        }else{
+            selectAnno.setAttribute("disabled", true)
+        }
+
+        this.renderGrafico(nombreEnfermedad, anno)
+        this.renderTabla(nombreEnfermedad, anno)
+    }
+
     filtoSelectAnno(e){
         let anno = e.target.value;
         let labelEnfermedad = document.getElementsByClassName("nombreEnfermedad")[0]
         this.renderTabla(labelEnfermedad.innerText, anno)
+    }
+
+    agregarFavorito(e){
+        if(e.target.type !== undefined){
+            let selectAnno = document.getElementsByClassName("annos")[0]
+            let nombreEnfermedad = document.getElementsByClassName("nombreEnfermedad")[0].getAttribute('name')
+            let name = e.target.name;
+
+            let statusFav = this.state.favoritos
+            if(!statusFav.includes(name)){
+                statusFav.push(name)
+                if(name == nombreEnfermedad) selectAnno.removeAttribute("disabled")
+                e.target.classList.remove("btn-dark")
+                e.target.classList.add("btn-danger")
+                this.setState({ favoritos:statusFav })
+            }else{
+                statusFav.pop(name)
+                selectAnno.setAttribute("disabled", true)
+                e.target.classList.add("btn-dark")
+                e.target.classList.remove("btn-danger")
+                this.setState({ favoritos:statusFav })
+            }
+        }
     }
 
     render() {
@@ -78,7 +130,7 @@ class Main extends React.Component {
                 <h3 className="text-center mt-5 mb-5">Visor Causas de muerte EEUU</h3>
                 <Row className="justify-content-md-center">
                     <Col xs={12} md={4}>
-                        <p>aqui ira el leftbar</p>
+                        <LeftBar evento={this.filtoEnfermedad} agregarFavorito={this.agregarFavorito} enfF={this.state.favoritos} data={this.props.headerTabla}/>
                     </Col>
                     <Col xs={12} md={6}>
                         <SelectorFilter evento={this.filtoSelectAnno} data={this.props.headerTabla}/>
