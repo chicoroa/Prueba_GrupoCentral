@@ -13,9 +13,16 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            tituloGrafico: '', 
+            labeles: [],
+            dataGrafico:[],
             headerTabla: this.props.headerTabla,
             columnas: this.props.columnas,
+            favoritos: []
         };
+        this.filtoEnfermedad = this.filtoEnfermedad.bind(this)
+        this.filtoSelectAnno = this.filtoSelectAnno.bind(this)
+        this.agregarFavorito = this.agregarFavorito.bind(this)
     }
     
     renderTabla(nombreEnfermedad, anno){

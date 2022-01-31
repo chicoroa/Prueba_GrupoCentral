@@ -6,11 +6,7 @@ function App() {
   let datosHeaders = ''
   let columnas = []
 
-  const { data, loading, error } = useFetch()
-  if (loading) return <div>Cargando...</div>
-  if (error) return <div>{error}</div>
-
-  const { data, loading, error } = useFetch()
+    const { data, loading, error } = useFetch()
   if (loading) return <div>Cargando...</div>
   if (error) return <div>{error}</div>
   
