@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useFetch }  from './services/data';
+import Main from "./components/Main"
+
 
 function App() {
+  let datosHeaders = ''
+  let columnas = []
+
+  const { data, loading, error } = useFetch()
+  if (loading) return <div>Cargando...</div>
+  if (error) return <div>{error}</div>
+
+  const { data, loading, error } = useFetch()
+  if (loading) return <div>Cargando...</div>
+  if (error) return <div>{error}</div>
+  
+  if(data.length != 0){
+    datosHeaders = data.meta.view.columns.map((e) => { if(e.id !== -1) return e })
+    datosHeaders = datosHeaders.filter((e) => {return e !== undefined})
+    data.data.forEach((e, i) => {
+        let td = []
+        let id = e[0]
+        let arrayTD = e.slice(8, e.length)
+        arrayTD.map((e,i) => {
+            td.push(<td key={i}>{e}</td>)
+        })
+        columnas.push(<tr key={id}>{td}</tr>)
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { datosHeaders != '' ? <Main data={data.data} headerTabla={datosHeaders} columnas={columnas}/> : ''}
     </div>
   );
 }
