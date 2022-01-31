@@ -1,6 +1,6 @@
 import React from "react"
 import Tabla from "./Tabla"
-
+import Chart from "./Chart"
 
 class Main extends React.Component {
     constructor(props) {
@@ -65,14 +65,27 @@ class Main extends React.Component {
         }) 
     }
 
-    
+    filtoSelectAnno(e){
+        let anno = e.target.value;
+        let labelEnfermedad = document.getElementsByClassName("nombreEnfermedad")[0]
+        this.renderTabla(labelEnfermedad.innerText, anno)
+    }
 
     render() {
         return (
             <>
             <Container fluid>
                 <h3 className="text-center mt-5 mb-5">Visor Causas de muerte EEUU</h3>
-                <Tabla headers={this.state.headerTabla} columnas={this.state.columnas} evento={this.cambiarPagina}/>
+                <Row className="justify-content-md-center">
+                    <Col xs={12} md={4}>
+                        <p>aqui ira el leftbar</p>
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <SelectorFilter evento={this.filtoSelectAnno} data={this.props.headerTabla}/>
+                        <p>aqui ira el Grafico (Chart)</p>
+                        <Tabla headers={this.state.headerTabla} columnas={this.state.columnas} evento={this.cambiarPagina}/>
+                    </Col>
+                </Row>
             </Container>
             </>
         );
