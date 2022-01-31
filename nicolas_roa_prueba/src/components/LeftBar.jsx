@@ -28,7 +28,7 @@ class LeftBar extends React.Component{
         let r = enfermedades.map((e,i) => {
             if(i > 2){
                 return (
-                    <Row className="barra">
+                    <Row className="barra" key={`barra2_${i}`}>
                         <Col xs={10} md={10}>
                             <p id={e.fieldName} key={e.fieldName} onClick={this.props.evento} className="enfermedades">{e.name}</p>
                         </Col>
@@ -47,11 +47,11 @@ class LeftBar extends React.Component{
     }
 
     favoritos(){
-        let r = this.props.enfF.map(e => { 
+        let r = this.props.enfF.map((e, i) => { 
             let elemento = document.getElementById(e)
             return (
-                <Row className="barra">
-                    <Col xs={10} md={10}>
+                <Row className="barra" key={`barra_${i}`}>
+                    <Col xs={10} md={10} key={`col_${i}`}>
                         <p id={elemento.id} key={elemento.id} onClick={this.props.evento} className="enfermedades">{elemento.innerText}</p>
                     </Col>
                 </Row>
@@ -92,20 +92,20 @@ class LeftBar extends React.Component{
         let enfav = this.favoritos()
         return (
             <>
-            <Card className="shadow-lg" style={{ width: '30rem' }}>
+            <Card className="shadow-lg" key="Card" style={{ width: '30rem' }}>
                 <Card.Body>
                     <Row>
-                        <Col xs={12} md={12} className="text-left">
-                            <Tabs className="myClass" activeKey={this.state.activeTab} onSelect={this.handleSelect}>
+                        <Col key="central" xs={12} md={12} className="text-left">
+                            <Tabs className="myClass" key="Tabs" activeKey={this.state.activeTab} onSelect={this.handleSelect}>
                                 <Tab key="tab1" eventKey={1} key="Enfermedades" title="Enfermedades">
-                                    <Col xs={12} md={12} className="mt-5 mb-5">
-                                        <Form.Control type="text" placeholder="Buscador" onChangeCapture={this.buscador} className="mb-5"/>
-                                        <div id="resultados"></div>
+                                    <Col key="dataEnf" xs={12} md={12} className="mt-5 mb-5">
+                                        <Form.Control key="buscador" type="text" placeholder="Buscador" onChangeCapture={this.buscador} className="mb-5"/>
+                                        <div key="resultados" id="resultados"></div>
                                         {enfe}
                                     </Col>
                                 </Tab>
                                 <Tab key="tab2" eventKey={2} key="Favoritos" title="Favoritos">
-                                    <Col xs={12} md={12} className="mt-5 mb-5">
+                                    <Col key="dataFav" xs={12} md={12} className="mt-5 mb-5">
                                         {enfav}
                                     </Col>
                                 </Tab>
