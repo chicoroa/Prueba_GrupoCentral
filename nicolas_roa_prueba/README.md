@@ -1,4 +1,13 @@
 
+Cuando Inicia el sitio el grafico cargara con los 5 años y el total por año, si se selecciona una enfermedad sin estar en favorito el grafico tambien mostrara un resumen por año
+
+Ahora si se filtra por año (Dandole clic al btn negro (no al icono), se habilitara el select como se solicito) y ahí se filtrar por año para tener el resumen tanto en el grafico como en la tabla por Mes del año selccionado
+
+Espero que se haya entendido...
+
+Muchisimas Gracias :D
+
+
 
 ![image](https://user-images.githubusercontent.com/8826597/151830091-a4c1e873-aad8-428e-8f00-32a602a19166.png)
 
