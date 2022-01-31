@@ -1,6 +1,6 @@
 import React from "react"
 import Tabla from "./Tabla"
-import Chart from "./Chart"
+import SelectorFilter from "./SelectFilter";
 
 class Main extends React.Component {
     constructor(props) {
